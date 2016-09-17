@@ -1,6 +1,6 @@
 #run the KnowledgeGraph code from command line
-using KnowledgeGraph
-#include("KnowledgeGraph.jl")
+#using KnowledgeGraph
+include("KnowledgeGraph.jl")
 
 function main()
   no_input = false

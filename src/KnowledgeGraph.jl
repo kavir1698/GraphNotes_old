@@ -15,19 +15,19 @@ type all_data
   node_2_parents::Array{ASCIIString}
   second_node_description::ASCIIString
   relation::ASCIIString
-  reference::Dict{String,Any}
+  reference::Dict{AbstractString,Any}
 end
 
 
 type Node
-  name::String
+  name::AbstractString
   synonymous::Array{ASCIIString}
   parents::Array{ASCIIString}
   reference::Array
 end
 
 
-Node() = Node("NA",Array{ASCIIString}(0),Array{ASCIIString}(0),Dict{String,Any})
+Node() = Node("NA",Array{ASCIIString}(0),Array{ASCIIString}(0),Dict{AbstractString,Any})
 
 
 function get_query(;lower_case::Bool=true) # get the user input
@@ -42,13 +42,13 @@ end
 
 function get_reference()
   println("Book/Article title: ")
-  Reference = Dict{String,Any}()
+  Reference = Dict{AbstractString,Any}()
   Reference["title"] = get_query(lower_case=false)
   println("Journal name / Publisher: ")
   Reference["journal"] = get_query(lower_case=false)
   println("Authors: (first name, last name and first name2, last name2)")
   authors0 = get_query(lower_case=false)
-  authors = Array{String}(0)
+  authors = Array{AbstractString}(0)
   for j in split(authors0,"and")
     if contains(j,",")
       k = split(j,",")
@@ -168,10 +168,10 @@ function get_data_file(file_name::ASCIIString) # get data from a file
       dat[9] = convert(ASCIIString,dat[9])
 
       reference = Dict{ASCIIString,Any}()
-      ref = split(fields[10],"-")
+      ref = split(fields[10],",")
       authors = Array{ASCIIString}(0)
       for j in split(ref[1],"AND")
-        k = split(j,",")
+        k = split(j," ")
         first_name = strip(k[1])
         last_name = strip( k[2])
         push!(authors,string(last_name,",",first_name))
@@ -200,7 +200,7 @@ function get_data_file(file_name::ASCIIString) # get data from a file
 end
 
 
-# function export_to_file(file_name::String,nodes_dict,edges_dict,synonymous_dict)
+# function export_to_file(file_name::AbstractString,nodes_dict,edges_dict,synonymous_dict)
 #   #=
 #   first concept; synonymous names(,separated);first parents(,separated); first description;second concept;synonymous names(,separated);second parents(,separated); second description; relation; reference (authors (-separated),title,journal,year,study type (experimental,computational,theoretical))
 #   If you don't want to fill any of the fields above, write NA.
@@ -388,9 +388,11 @@ function present(nodes_dict::Dict,edges_dict::Dict,synonymous_dict) # show the a
     elseif f == "a" || f == "all"
       beautiful_print(collect(keys(nodes_dict)))
     elseif f == "d" || f == "description"
-      beautiful_print (nodes_dict[query]["description"])
+      beautiful_print(nodes_dict[query]["description"])
       des = nodes_dict[query]["description"]
-      if des[1] != "NA" && des[1] != ""
+      if length(des) == 0
+        println("No description!")
+      elseif des[1] != "NA" && des[1] != ""
         println("Type a number to see its reference, else q. ");rr = get_query()
         if rr != "q"
           beautiful_print(nodes_dict[query]["reference"][parse(Int,rr)])
@@ -433,6 +435,9 @@ end
 
 
 function save_data(file_name::ASCIIString,nodes_dict::Dict,edges_dict::Dict,synonymous_dict::Dict)
+  if ~endswith(file_name, ".jld")
+    file_name = file_name * ".jld"
+  end
   save(file_name,"library",(nodes_dict,edges_dict,synonymous_dict))
 end
 
