@@ -1,1 +1,0 @@
-Gene; Genes;Biology, cell,dna; A gene is a unit of DNA where it shows how proteins are built;protein binding site;PBS;Biology, cell,dna; A sequence of DNA near Genes; regulatory proteins bind and regulate gene expression; ali rezaee,NA,NA,2016,theoretical

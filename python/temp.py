@@ -1,11 +1,5 @@
-# This algorithm saves data in a database
 import MySQLdb as mdb
 import os
-
-# os.system("sudo /etc/init.d/mysql start")  # run this the first time that you start your machine.
-
-# TODO use another user, not root. 
-# TODO create database here but not before
 def start_db():
     # # for the first time only
     con = mdb.connect(host="localhost", user="root", passwd="", db="kgDb")
@@ -57,9 +51,10 @@ def read_input(inputString):
     first concept; synonymous names(,separated);parent 1;first description;second concept;synonymous names(,separated);parent 2; second description; relation; reference (firstname1, lastname1 - firstname2, lastname2 - ...),title,journal,year);study type (experimental,computational,theoretical)
 
     """
-    concept_1, synonymous_names_1, parent_1, description_1, concept_2, synonymous_names_2, parent_2, description_2, relation, reference, study = inputString.strip().split(";")
+    concept_1, synonymous_names_1, parent_1, description_1, concept_2, synonymous_names_2, parent_2, description_2, relation, reference, study = [i.strip() for i in inputString.strip().split(";")]
 
     return Inputs(concept_1, synonymous_names_1, parent_1, description_1, concept_2, synonymous_names_2, parent_2, description_2, relation, reference, study)
+
 
 def read_file(filepath):
     """
@@ -81,7 +76,7 @@ def populate_nodesdb(cur, concept, syns, parent, description, reference, study, 
 
     # insert synonymous values as new entries with the same data
     all_syns = syns.strip().split(",")
-    if len()all_syns > 0:
+    if len(all_syns) > 0:
         for ss in all_syns:
             cmd = "INSERT INTO NodesDb(Usr, Node, Ref, Parent, Des, Study) VALUES('%s', '%s', '%s', '%s', '%s', '%s')" % (usr, ss, reference, parent, description, study)
             cur.execute(cmd)
@@ -124,13 +119,13 @@ def add_to_tables_from_file(cur, filepath, usr="testu"):
             populate_edgesdb(cur, ip.concept_1, ip.concept_2, ip.relation, ip.reference, ip.synonymous_names_1, ip.synonymous_names_2, ip.study, usr=usr)    
 
 def return_node_property(cur, concept, field):
-    cmd = "SELECT %s FROM NodesDb WHERE Node=%s" % (field, concept)
+    cmd = "SELECT %s FROM NodesDb WHERE Node='%s'" % (field, concept)
     cur.execute(cmd)
     a = cur.fetchall()
     return a
 
 def find_relations(cur, concept):
-    cmd = "SELECT Node1, Node2, Des, Ref From EdgesDb WHERE Node1=%s OR Node2=%s" % (concept, concept)
+    cmd = "SELECT Node1, Node2, Des, Ref From EdgesDb WHERE Node1='%s' OR Node2='%s'" % (concept, concept)
     cur.execute(cmd)
     a = cur.fetchall()
 
@@ -140,21 +135,16 @@ def find_relations(cur, concept):
             key = rel[1]
         else:
             key = rel[0]
-        relations[key] = []
+        relations[key] = {}
         relations[key]["relation"] = rel[2]
         relations[key]["reference"] = rel[3]
     
     return relations
 
 def get_info(cur, keyword):
-    a = return_node_property(cur, keyword, field="*")
-    b = find_relations(cur, keyword)
-    # TODO finish this function
-    
-# cur.execute("insert ignore into NodesDb(Usr) Values ('ali')")
-# cur.execute("Select Usr, Syns from NodesDb")
-# cur.execute("Select all from NodesDb")
-
-# cur.fetchall()
-# cur.execute("update NodesDb set Syns='alis, ALI, al, li' where Usr='ali'")
-# cur.execute("select * from NodesDb where syns like '%ali%'")
+    node = return_node_property(cur, keyword, field="*")
+    if node:
+        relations = find_relations(cur, keyword)
+        return node, relations
+    else:
+        return None, None

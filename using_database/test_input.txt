@@ -1,0 +1,2 @@
+# first concept; synonymous names(,separated);parent 1;first description;second concept;synonymous names(,separated);parent 2; second description; relation; reference (firstname1, lastname1 - firstname2, lastname2 - ...),title,journal,year);study type (experimental,computational,theoretical)
+Gene; Genes, gene, genes;DNA;A gene is a unit of DNA where it shows how proteins are built;protein binding site;PBS;DNA; A sequence of DNA near Genes; regulatory proteins bind and regulate gene expression; ali rezaee,NA,NA,2016; theoretical
