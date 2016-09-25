@@ -23,10 +23,10 @@ class Inputs:
 
 class kgraph():
     def __init__(self):
-        self.con = kgraph.setup_db()
+        self.con = kgraph._setup_db()
 
     @staticmethod
-    def start_db():
+    def _start_db():
         # # for the first time only
         con = mdb.connect(host="localhost", user="testu", passwd="testu", db="kgDb")
         # cur = con.cursor()
@@ -37,7 +37,7 @@ class kgraph():
         return con 
 
     @staticmethod
-    def start_tables(con):
+    def _start_tables(con):
         # # check if table exists
         with con:
             cur = con.cursor()
@@ -52,13 +52,13 @@ class kgraph():
                 cur.execute("CREATE TABLE EdgesDb(Id INT PRIMARY KEY AUTO_INCREMENT, Usr VARCHAR(25), Node1 VARCHAR(225), Node2 VARCHAR(225), Des VARCHAR(225), Ref VARCHAR(225), Study VARCHAR(225), mixed VARCHAR(500), UNIQUE (mixed))")
     
     @staticmethod
-    def setup_db():
-        con = kgraph.start_db()
-        kgraph.start_tables(con)
+    def _setup_db():
+        con = kgraph._start_db()
+        kgraph._start_tables(con)
         return con
     
     @staticmethod
-    def read_input(inputString):
+    def _read_input(inputString):
         """
         input string with the following structure:
         first concept; synonymous names(,separated);parent 1;first description;second concept;synonymous names(,separated);parent 2; second description; relation; reference (firstname1, lastname1 - firstname2, lastname2 - ...),title,journal,year);study type (experimental,computational,theoretical)
@@ -69,7 +69,7 @@ class kgraph():
         return Inputs(concept_1, synonymous_names_1, parent_1, description_1, concept_2, synonymous_names_2, parent_2, description_2, relation, reference, study)
 
     @staticmethod
-    def read_file(filepath):
+    def _read_file(filepath):
         """
         Each line should be the same format as inputString (see read_input function).
         Lines starting with # are ommited
@@ -77,11 +77,11 @@ class kgraph():
         all_inputs = []
         for line in open(filepath):
             if not line.startswith("#"):
-                inputs = kgraph.read_input(line)
+                inputs = kgraph._read_input(line)
                 all_inputs.append(inputs)
         return all_inputs
 
-    def populate_nodesdb(self, concept, syns, parent, description, reference, study, usr="testu"):
+    def _populate_nodesdb(self, concept, syns, parent, description, reference, study, usr="testu"):
         with self.con:
             cur = self.con.cursor()
             mixed = "-".join([concept, description, reference])
@@ -102,7 +102,7 @@ class kgraph():
 
         # return cur
 
-    def populate_edgesdb(self, concept1, concept2, description, reference, syns1="", syns2="", study="", usr="testu"):
+    def _populate_edgesdb(self, concept1, concept2, description, reference, syns1="", syns2="", study="", usr="testu"):
         with self.con:
             cur = self.con.cursor()
             mixed = "-".join([concept1, concept2, description, reference])
@@ -134,7 +134,7 @@ class kgraph():
                         cur.execute(cmd)
         # return cur
 
-    def return_node_property(self, concept, field):
+    def _return_node_property(self, concept, field):
         with self.con:
             cur = self.con.cursor()
             cmd = "SELECT %s FROM NodesDb WHERE Node='%s'" % (field, concept)
@@ -143,7 +143,7 @@ class kgraph():
         
         return a
 
-    def find_relations(self, concept):
+    def _find_relations(self, concept):
         with self.con:
             cur = self.con.cursor()
             cmd = "SELECT Node1, Node2, Des, Ref From EdgesDb WHERE Node1='%s' OR Node2='%s'" % (concept, concept)
@@ -162,10 +162,10 @@ class kgraph():
         
         return relations
 
-    def get_info(self, keyword):
-        node = self.return_node_property(keyword, field="*")
+    def _get_info(self, keyword):
+        node = self._return_node_property(keyword, field="*")
         if node:
-            relations = self.find_relations(keyword)
+            relations = self._find_relations(keyword)
         else:
             node = None
             relations = None
@@ -173,17 +173,17 @@ class kgraph():
         return node, relations
         
     def show_data(self, concept):
-            node, relations = self.get_info(concept)
+            node, relations = self._get_info(concept)
             print(node)
             print(relations)
     def add_to_graph(self, inputfile):
-        inputs = kgraph.read_file(inputfile)
+        inputs = kgraph._read_file(inputfile)
         for ip in inputs:
-            self.populate_nodesdb(ip.concept_1, ip.synonymous_names_1, ip.parent_1, ip.description_1, ip.reference, ip.study)
+            self._populate_nodesdb(ip.concept_1, ip.synonymous_names_1, ip.parent_1, ip.description_1, ip.reference, ip.study)
             if ip.concept_2 and ip.relation:
                 if ip.description_2:
-                    self.populate_nodesdb(ip.concept_2, ip.synonymous_names_2, ip.parent_2, ip.description_2, ip.reference, ip.study)
-                self.populate_edgesdb(ip.concept_1, ip.concept_2, ip.relation, ip.reference, ip.synonymous_names_1, ip.synonymous_names_2, ip.study)
+                    self._populate_nodesdb(ip.concept_2, ip.synonymous_names_2, ip.parent_2, ip.description_2, ip.reference, ip.study)
+                self._populate_edgesdb(ip.concept_1, ip.concept_2, ip.relation, ip.reference, ip.synonymous_names_1, ip.synonymous_names_2, ip.study)
 
 
 
