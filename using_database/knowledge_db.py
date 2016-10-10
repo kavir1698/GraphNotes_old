@@ -6,6 +6,11 @@ import MySQLdb as mdb
 
 # TODO autmatically create the testu user here, but not before.
 # TODO create database here but not before.
+# BUG syn names for node 2 are not in the table. Why?
+# TODO add more than one classification of papers, e.g. theoretical and computational
+# TODO show all available data without synonymous values
+# TODO new class to present data beautifully.
+
 class Inputs:
     def __init__(self, concept_1, synonymous_names_1, parent_1, description_1, concept_2, synonymous_names_2, parent_2, description_2, relation, reference, study):
         self.concept_1 = concept_1
@@ -29,11 +34,8 @@ class kgraph():
     def _start_db():
         # # for the first time only
         con = mdb.connect(host="localhost", user="testu", passwd="testu", db="kgDb")
-        # cur = con.cursor()
         # cur.execute('CREATE DATABASE IF NOT EXISTS kgDb')
-        # cur.close ()
         # con = cur.execute("USE kgDb")
-        # cur = con.cursor()
         return con 
 
     @staticmethod
@@ -184,6 +186,3 @@ class kgraph():
                 if ip.description_2:
                     self._populate_nodesdb(ip.concept_2, ip.synonymous_names_2, ip.parent_2, ip.description_2, ip.reference, ip.study)
                 self._populate_edgesdb(ip.concept_1, ip.concept_2, ip.relation, ip.reference, ip.synonymous_names_1, ip.synonymous_names_2, ip.study)
-
-
-
