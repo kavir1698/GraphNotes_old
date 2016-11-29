@@ -8,6 +8,9 @@ import sys
 
 
 def is_sqlite3(filename):
+    """
+    Return True if file is an sqlite3 database, False otherwise.
+    """
     from os.path import isfile, getsize
 
     if not isfile(filename):
@@ -22,6 +25,10 @@ def is_sqlite3(filename):
 
 
 def get_settings():
+    """
+    State (last opened database and last imported file)
+    are stored in './settings.txt'.
+    """
     try:
         with open('settings.txt', 'r') as f:
             settings = eval(f.read())
@@ -31,6 +38,10 @@ def get_settings():
 
 
 def save_settings(settings):
+    """
+    State (last opened database and last imported file)
+    are stored in './settings.txt'.
+    """
     with open('settings.txt', 'w') as f:
         f.write(str(settings))
 
@@ -51,6 +62,10 @@ class Inputs:
 
 
 class kgraph():
+    """
+    Objects of this class provide an interface to concepts database.
+    It allows creating such database, opening, importing data, querying it.
+    """
 
     def __init__(self, filepath):
         self.con = sqlite3.connect(filepath)
@@ -102,7 +117,7 @@ class kgraph():
                 all_inputs.append(inputs)
         return all_inputs
 
-    def _populate_nodesdb(self, concept, syns, parent, description, reference, study, usr="testu"):
+    def _populate_nodesdb(self, concept, syns, parent, description, reference, study, usr=""):
         with self.con:
             cur = self.con.cursor()
             command = """INSERT INTO NodesDb(Usr, Node, Ref, Parent, Des, Study, mixed)
@@ -114,7 +129,7 @@ class kgraph():
 
         # return cur
 
-    def _populate_edgesdb(self, concept1, concept2, description, reference, syns1="", syns2="", study="", usr="testu"):
+    def _populate_edgesdb(self, concept1, concept2, description, reference, syns1="", syns2="", study="", usr=""):
         with self.con:
             cur = self.con.cursor()
             command = """INSERT INTO EdgesDb(Usr, Node1, Node2, Des, Ref, Study, mixed)
@@ -181,16 +196,23 @@ class kgraph():
             self._populate_edgesdb(ip.concept_1, ip.concept_2, ip.relation, ip.reference, ip.synonymous_names_1, ip.synonymous_names_2, ip.study)
 
     def search_concepts(self, keyword):
+        """Return a list of concepts that contain 'keyword'."""
         cur = self.con.cursor()
         cur.execute("SELECT Node FROM NodesDb WHERE LOWER(Node) LIKE '%' || ? || '%'", (keyword, ))
         return sorted({c for (c, ) in cur.fetchall()})
 
     def get_related_concepts(self, concept):
+        """Return a list of concepts that are related to a certain concept."""
         cur = self.con.cursor()
         cur.execute("SELECT Node1, Node2 FROM EdgesDb WHERE Node1=? OR Node2=?", (concept, concept))
         return sorted({c2 if concept == c1 else c1 for (c1, c2) in cur.fetchall()})
 
     def get_description(self, concept1, concept2=None):
+        """
+        Return a list of (description, reference) touples that describe either
+        a relation of two given concepts or, if only one concept is given,
+        just that one concept.
+        """
         cur = self.con.cursor()
         if not concept1:
             return []
@@ -203,8 +225,17 @@ class kgraph():
 
 
 class MainFrame(tk.Frame):
+    """
+    This frame represents the main logic of this program, it allows browsing the
+    concepts, relations and their descriptions.
+    """
 
     def __init__(self, parent, graph, settings):
+        """
+            parent - must be the root window, because it is used to set the title.
+            graph - kgraph object.
+            setings - a dict() of settings. It must contain a key 'last_opened'.
+        """
         tk.Frame.__init__(self, parent)
         self.parent = parent
         self.settings = settings
@@ -213,28 +244,27 @@ class MainFrame(tk.Frame):
 
         self.pack(fill=tk.BOTH, expand=1)
 
+        # 'Add data' button.
         frame_add = tk.Frame(self)
         frame_add.pack(expand=1)
         self.add_button = tk.Button(frame_add, text='Add data', command=self.add_data_window)
         self.add_button.pack(padx=5, pady=5, ipadx=5, ipady=5)
 
+        # Search entry
         frame_search = tk.Frame(self)
         frame_search.pack(fill=tk.X, expand=1, padx=5, pady=5)
-
         self.search_entry = tk.Entry(frame_search, width=40, justify='center')
         self.search_entry.insert(tk.END, 'Search')
         self.search_entry.focus()
         self.search_entry.selection_range(0, tk.END)
         self.search_entry.bind('<Return>', lambda _: self.update_concepts())
-        # self.search_entry.bind('<Control_L-Delete>', lambda event: self.search_entry.delete(0, tk.END))
         self.search_entry.pack(padx=5, pady=5, ipadx=5, ipady=5)
 
-        #self.search_button = tk.Button(frame_search, text='Search', command=self.update_concepts)
-        #self.search_button.pack(side=tk.LEFT, padx=5, pady=5, ipadx=5, ipady=5)
-
+        # A frame for selecting concept and relation.
         frame_concepts = tk.Frame(self)
         frame_concepts.pack(expand=1, padx=5, pady=5, ipadx=5, ipady=5)
 
+        # Concept selection box.
         outer_frame1 = tk.Frame(frame_concepts)
         tk.Label(outer_frame1, text='Concepts').pack()
         outer_frame1.pack(side=tk.LEFT)
@@ -248,7 +278,7 @@ class MainFrame(tk.Frame):
         self.concepts_box1.pack()
         frame1.pack(side=tk.TOP, padx=5, pady=5)
 
-
+        # Related concept selection box.
         outer_frame2 = tk.Frame(frame_concepts)
         tk.Label(outer_frame2, text='Relations').pack()
         outer_frame2.pack(side=tk.LEFT)
@@ -262,6 +292,7 @@ class MainFrame(tk.Frame):
         self.concepts_box2.pack()
         frame2.pack(side=tk.TOP, padx=5, pady=5)
 
+        # Description.
         description_frame = tk.Frame(self)
         description_frame.pack(padx=20, pady=20)
         tk.Label(description_frame, text='Descriptions').pack()
@@ -270,6 +301,7 @@ class MainFrame(tk.Frame):
 
 
     def update_concepts(self):
+        """Update concepts box based on what is written in search entry."""
         self.description.delete('1.0', tk.END)
         self.concepts_box2.delete(0, tk.END)
         concepts = self.graph.search_concepts(self.search_entry.get())
@@ -277,6 +309,7 @@ class MainFrame(tk.Frame):
         self.concepts_box1.insert(tk.END, *concepts)
 
     def update_related_and_description(self, event):
+        """Update related concepts box based on what is selected in concepts box.""" 
         self.concepts_box2.delete(0, tk.END)
         self.update_description(None)
         concept_list = self.concepts_box1.curselection()
@@ -286,6 +319,7 @@ class MainFrame(tk.Frame):
             self.concepts_box2.insert(tk.END, *related_concepts)
 
     def update_description(self, event):
+        """Update description box based on which concepts are selected."""
         self.description.delete('1.0', tk.END)
         idx = self.concepts_box1.curselection()
         c1 = self.concepts_box1.get(idx[0]) if idx else None
@@ -296,9 +330,12 @@ class MainFrame(tk.Frame):
 
 
     def add_data_window(self):
+        """Pop a window for adding new data to the database."""
         AddDataWindow(self.graph, self, self.settings)
 
+
 class NewDatabaseFrame(tk.Frame):
+    """This frame allows to create a new database."""
 
     def __init__(self, parent, window, settings):
         tk.Frame.__init__(self, parent)
@@ -327,6 +364,10 @@ class NewDatabaseFrame(tk.Frame):
         self.create_button.pack(side=tk.LEFT, padx=5, pady=5, ipadx=5, ipady=5)
 
     def fill_directory(self):
+        """
+        This function tries to get the directory where the last opened database was
+        and write this directory path to self.filename_entry.
+        """
         if 'last_opened' in self.settings:
             default_dir = os.path.dirname(self.settings['last_opened'])
         else:
@@ -338,6 +379,12 @@ class NewDatabaseFrame(tk.Frame):
 
 
     def create_database(self):
+        """
+        This function creates a new database with a path that is written
+        in self.filename_entry. If path links to an already existing file,
+        show an error box.
+        """
+
         filename = self.filename_entry.get()
         if os.path.isfile(filename):
             mbox.showerror('Error', filename + ' already exists')
@@ -354,12 +401,17 @@ class NewDatabaseFrame(tk.Frame):
 class MainWindow:
 
     def __init__(self, settings):
+        """
+        settings - a dictionary with optional settings ('last_opened', 'last_imported').
+        """
         self.create_main_window()
         self.create_main_menu()
         self.main_frame = None
         self.new_db_frame = None
         self.init_frame = None
 
+        # Try to open last opened file. If it is unknown (or does not exist), create
+        # 'Open database' and 'Create a new database' buttons.
         self.settings = settings
         if 'last_opened' in settings and os.path.isfile(settings['last_opened']) and is_sqlite3(settings['last_opened']):
             self.graph = kgraph(settings['last_opened'])
@@ -385,11 +437,10 @@ class MainWindow:
         menu = tk.Menu(menu_bar)
         menu.add_command(label='Open database', command=self.open_database)
         menu.add_command(label='Create a new database', command=self.create_new_db_frame)
-        # menu.add_command(label='Exit', command=self.exit)
         menu_bar.add_cascade(label="File", menu=menu)
 
     def open_database(self):
-
+        """This function opens a file picker dialog and opens the selected database."""
         if 'last_opened' in self.settings and os.path.isdir(self.settings['last_opened']):
             filename = tkFileDialog.askopenfilename(initialdir=os.path.dirname(self.settings['last_opened']))
         else:
@@ -409,6 +460,8 @@ class MainWindow:
                 mbox.showerror("Error", "File " + filename + " does not exist.")
 
     def create_main_frame(self):
+        # We want to hide the frames that are filling the window at the moment
+        # before creating a new frame.
         if self.main_frame != None:
             self.main_frame.pack_forget()
         if self.new_db_frame != None:
@@ -418,6 +471,8 @@ class MainWindow:
         self.main_frame = MainFrame(self.root, self.graph, self.settings)
 
     def create_new_db_frame(self):
+        # We want to hide the frames that are filling the window at the moment
+        # before creating a new frame.
         if self.main_frame != None:
             self.main_frame.pack_forget()
         if self.new_db_frame != None:
@@ -428,6 +483,10 @@ class MainWindow:
 
 
 class AddDataWindow:
+    """
+    This represents the window for adding new data manually
+    or importing it from a file.
+    """
 
     def __init__(self, graph, caller, settings):
         self.graph = graph
@@ -439,6 +498,8 @@ class AddDataWindow:
         submit_file_button = tk.Button(self.root, text='Add data from a file', command=self.submit_file)
         submit_file_button.grid(row=0, column=1, columnspan=2, padx=5, pady=5, ipadx=5, ipady=5)
 
+        # This describes positions for field entries.
+        # (field identifier, field entry label, row, column, column span, row span)
         self.fd = [
             ('concept_1', 'Concept 1', 1, 0, 1, 1),
             ('synonymous_names_1', 'Synonymous names 1', 2, 0, 1, 1),
@@ -460,12 +521,17 @@ class AddDataWindow:
             self.fields[-1].grid(row=row, column=col+1, rowspan=rowspan, columnspan=colspan, padx=5, pady=5, sticky=tk.W+tk.E+tk.N+tk.S)
 
 
+
         self.submit_button = tk.Button(self.root, text='Submit', command=self.submit)
         self.submit_button.grid(row=8, column=3, padx=5, pady=5, sticky=tk.W+tk.E+tk.N+tk.S)
 
         self.root.mainloop()
 
     def submit(self):
+        """
+        This function reads what's written in entry boxes and adds data
+        to the concepts graph.
+        """
         field_input = Inputs(*[f.get() for f in self.fields])
         try:
             self.graph.add_one_to_graph(field_input)
@@ -477,6 +543,10 @@ class AddDataWindow:
             f.delete(0, tk.END)
 
     def submit_file(self):
+        """
+        This function tries to data from a file to the concepts graph.
+        It shows either a success or error box afterwards.
+        """
         last_dir = ''
         if 'last_imported' in self.settings:
             last_dir = os.path.dirname(self.settings['last_imported'])
