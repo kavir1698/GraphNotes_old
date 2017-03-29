@@ -209,7 +209,7 @@ class kgraph():
 
     def get_description(self, concept1, concept2=None):
         """
-        Return a list of (description, reference) touples that describe either
+        Return a list of (description, reference) tuples that describe either
         a relation of two given concepts or, if only one concept is given,
         just that one concept.
         """
@@ -234,7 +234,7 @@ class MainFrame(tk.Frame):
         """
             parent - must be the root window, because it is used to set the title.
             graph - kgraph object.
-            setings - a dict() of settings. It must contain a key 'last_opened'.
+            settings - a dict() of settings. It must contain a key 'last_opened'.
         """
         tk.Frame.__init__(self, parent)
         self.parent = parent
