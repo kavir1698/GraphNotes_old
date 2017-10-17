@@ -1,0 +1,36 @@
+* rename "synonymous" to "alias"
+* show each concept and all its aliases below it indented.
+
+* Display line ends in the description field.
+* BUG: Escape should not close the application.
+* Search in references.
+* Grab reference by DOI (can be from http://www.doi2bib.org/#/doi or from https://www.crossref.org/ (provides API access: http://www.thamnos.de/misc/look-up-bibliographical-information-from-a-doi/))
+* Remove unnecessary buttons.
+* When multiple fields are selected, search within all of them
+* Search any part of the word, not only the matching word.
+* line-wrap in edit window for descriptions
+* Rich text functionality in description field.
+* Add a button to "Add relation".
+* Keep all references, even those imported from Bibtex in the database.
+* Better formatting of Bibtex files.
+* Start the window larger.
+* more than one level of subcategory. for example, number of RNA secondary structures would have two subcategories: RNA, secondary structure, number of
+* Search within subcategory levels
+* bibtex does not read tags other than @article
+* limit number of nodes in free version.
+* Connect with reference managers
+* get paid for your products: quircky.com, ideabuyer.com, sellprojects.in , sideprojectors.com
+* Bugs:
+  1. the program crashes if there are special characters in the bibtex file (see crash_example_bibtex.txt)
+  2. if the bibtex file has every article entry in one line, the program cannot import it (see crash_example_bibtex.txt)
+
+* Add application version to each download.
+* Add a product key to the application for paid versions, so you can sell the key. If someone does not have the product key, they will be able to use the limited version of the app.
+  * product keys should be restricted to a single license key.
+  * A simple product key logic could be to start with saying that the product key consists of four 5-digit groups, like abcde-fghij-kljmo-pqrst, and then go on to specify internal relationships like f+k+p should equal a, meaning the first digits of the 2, 3 and 4 group should total to a. This means that 8xxxx-2xxxx-4xxxx-2xxxx is valid, so is 8xxxx-1xxxx-0xxxx-7xxxx. Of course, there would be other relationships as well, including complex relations like, if the second digit of the first group is odd, then the last digit of the last group should be odd too. This way there would be generators for product keys and verification of product keys would simply check if it matches all the rules.
+  Encryption are normally the string of information about the license encrypted using a private key (== digitally signed) and converted to Base64. The public key is distributed with the application. When the Base64 string arrives, it is verified (==decrypted) by the public key and if found valid, the product is activated.
+  * Commercial ready made options options (software licensing and protection): http://www.inishtech.com/pricing/ , https://sentinel.gemalto.com/software-monetization/software-protection-and-licensing/ , https://msdn.microsoft.com/en-us/library/bb931699.aspx , https://www.softwarekey.com/product-list/ , https://www.crypkey.com
+
+  * Open source solutions: https://www.codeproject.com/articles/4034/open-source-software-protection-system-part ,
+* Write a protective license and force people to sign it before downloading
+* use "Code Signing Certificate" to make sure nobody changes your code and redistribute it. Certificate Authorities like Comodo, Symantec, Thawte are offering Code Signing.
