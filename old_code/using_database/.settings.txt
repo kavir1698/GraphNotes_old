@@ -1,1 +1,0 @@
-{'last_imported': '/mnt/d/projects/KnowledgeGraph-master/using_database/bug_input.txt', 'last_opened': '/mnt/d/projects/KnowledgeGraph-master/using_database/papers_Db'}

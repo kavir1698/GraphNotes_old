@@ -1,1 +1,0 @@
-{'last_opened': '/mnt/c/Users/arvka/Dropbox/papers_Db'}

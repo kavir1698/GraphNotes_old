@@ -1,4 +1,4 @@
-Instructions how to build the project:
+Instructions how to build the program from source.
 
 Windows:
 1. Check the version of Python. This should be 3.5. Other versions have not been tested. For checking this, type in cmd: python --version. If you see this error: " 'python' is not recognized as an internal or external command, operable program or batch file.", install Python3.5 or type in cmd full path to python.exe (For example "C:\Python35\python.exe")
@@ -14,7 +14,7 @@ After that line will have (env) prefix at the start
 The argument " --paths env\Lib\site-packages\PyQt5\Qt\bin " only need for Windows because pyinstaller doesn't see PyQt without this.
 9. In "dist" folder you can see your "application.exe". Don't forget to add "Help" folder with "index.html" and "logo.png" into folder with "application.exe"
 
-Linux: (Ubuntu)
+Linux (Ubuntu):
 1. python3.5 --version
 2. Go to folder with project in cmd using command cd
 3. python3.5 -m venv env
@@ -25,8 +25,8 @@ Linux: (Ubuntu)
 8. pyinstaller --onefile --clean --windowed application.py 
 9. Copy "Help" folder and "logo.png" to "dist" folder
 
-I think the same should work and on Mac platform. In general, follow this steps:
-1. Check the version of Python. If it no, install Python3.5
+Mac:
+1. Check the version of Python (should be Python3.5)
 2. Go to the project folder in terminal/shell
 3. Create virtual environment using: python -m venv name_of_folder
 4. Activate virtual environment and go into project folder if it necessary.

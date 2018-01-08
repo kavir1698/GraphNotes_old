@@ -1,1 +1,0 @@
-{ 'last': r'/home/hyzyla/Projects/GraphNotes/new.db' }

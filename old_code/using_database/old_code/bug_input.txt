@@ -1,5 +1,0 @@
-Concept 1;;;description 1;;;; ; ; Reference 1;
-Concept 1;;;description 2;;;; ; ; Reference 1;
-Concept 1;;;description 3;;;; ; ; Reference 2;
-Concept 1;;;; concept 2;;; ; relation 1; Reference 3;
-Concept 1;;;; concept 2;;; ; relation 2; Reference 4;
