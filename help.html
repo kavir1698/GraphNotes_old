@@ -3,12 +3,12 @@
         <style media="screen" type="text/css">
             #container {
                 position:relative;
-                width:65%;
+                width:60%;
                 height:auto;
                 /*align-content: center;*/
                 /*text-align: center; */
                 margin: 0 auto;
-                font-size: 150%;
+                font-size: 110%;
 
             }
         </style>
@@ -20,52 +20,65 @@
             <h2>What is GraphNotes?</h2>
 
             <h3> The problem: </h3>
-            <p> Research requires remembering many facts and details with credible references. It is easy to forget a specifc piece of information after a few days or months, or forget where we read it. Scientists usually mark PDF files or write down important details in a text documents. These files can quickly pile up and make it tedious to find specific pieces of information.</p>
+            <p> Research requires remembering many facts and details with credible references. It is easy to forget a specifc piece of information after a few days or months, or forget where you read it. Scientists usually mark PDF files or write down important details in text documents. These files can quickly pile up and make it tedious to find specific information.</p>
 
-            <p>A traditional method for gathering all the necessary information is using paper note cards. In a note card, we write specific information along with references it. We then organize the note cards and use them for writing papers or books. This method has a few drawbacks, namely, it will be difficult to keep all the cards organized as we add cards, and it will become more difficult to find a specific card quickly. Therefore, people usually write new cards for each new project. This is inefficient.</p>
+            <p>A traditional method for gathering all the necessary information is using paper note cards. In a note card, we write specific information along with their references. We then organize the note cards and use them for writing papers or books. This method has a few drawbacks, namely, it will be difficult to keep all the cards organized as we add more of them, and it will become more difficult to find a specific card quickly. Therefore, people usually prepare and keep a separate set of note cards for each project. This is inefficient!</p>
+
+            <img src="figures/rnotes.jpg" width="88%">
 
             <h3>Solution: </h3>
-            <p>Introducing GraphNotes, I offer a solution this problem. This is a software for organizing and easily retrieving key scientific concepts. As you read textbooks or journal articles, you come across critical concepts that will be likely useful in the future. You can store them in GraphNotes and find them quickly whenever you need them. GraphNotes uses a graph to store concepts. Each concept comprises a node in a graph. If there is a relation between two concepts, it will be an link between the concepts. Each node or link can store as many descriptions and references as necessary. When you need to retrieve a specific information, you can search within nodes, or references or links, and quickly find what you were looking for.
+            <p>Introducing GraphNotes, I offer a solution to this problem. This is a software for organizing and easily retrieving scientific concepts. As you read textbooks or journal articles, you come across critical concepts that will be likely useful in the future. You can store them in GraphNotes and find them quickly whenever you need them. GraphNotes uses a graph structure to store your notes. A graph is a series of nodes that are connected to one another if there is a relationship between any two nodes. Each concept comprises a node in the graph. If there is a relation between two concepts, it will be an link between the concepts. Each node or link can store as many descriptions and references as necessary. When you need to retrieve a specific information, all you need is to search for the concept you are looking for, and see all descriptions about it, and all of its relations with other concepts. The figure below shows a schematic view of how concepts and their relations are organized in GraphNotes. The figure shows descriptions for two concepts and a relation between them, in a graph with five nodes and five edges.
             </p>
 
+            <img src="figures/graphnotesconcept.png" width="110%">
+
             <h2> How to use it? </h2>
+            <h3> Installation</h3>
+            <p>There is no installation. Just download a zip file for your operating system (Windows/Mac/Linux), unzip it, and open the executable within the unzipped folder.</p>
 
             <h3> Initializing the program for the first time </h3>
-            <p> If it is the first time that you open GraphNotes, it will ask you for a location to store its database file. The database file stores all the information you enter into the program, so keep it in a safe location (I recommend your Dropbox or other cloud storages folder). You can back it up and open it on other computers.</p>
+            <p> If it is the first time you open GraphNotes, it will ask for a location to store its database file. The database file stores all the information you enter into the program, so keep it in a safe location (I recommend your Dropbox or other cloud storages folder). You can back up the database file and open it with GraphNotes on other computers.</p>
             <img src="figures/fig01.png">
 
+            <p> Once you choose an existing database file or create a new one and open the program, you will see three empty panes: Concepts, Relations, and Description. The concepts pane shows the list of concepts you have added. Selecting a concept will show its descriptions in the Description pane, and its related concepts in the Relations pane. Selecting a related concept in the Relations pane will show the relation between the two concepts in the Description pane.</p>
+
+            <p> Above the three panes, there is a search bar, with option to limit the search, and two buttons to add data and export added references as a Bibtex file.</p>
+
+            <img src="figures/fig02.png" width="110%">
+            
             <h3> Adding a single concept and its descriptions </h3>
             <ul>
                 <li> Click on the <i> Add data </i> button. </li>
-                <li> Type information in the <i> Concept 1 </i> section </li>
+                <li> Type information in the <i> Concept 1 </i> section. </li>
                 <ul>
-                    <li> To make organizing information easier, each concept has a <i> Subcategory </i> field. Use the <i> Subcategory </i> field to add specific details about a more generation concept. For example, if you want to add information about the speed of light, you may type "Light" in the concept field, and type "Speed of" in the subcategory field. </li>
+                    <li> To make organizing information easier, each concept has a <i> Subcategory </i> field. Use the <i> Subcategory </i> field to add specific details about a more general concept. For example, if you want to add information about the speed of light, you may type "Light" in the concept field, and type "Speed of" in the subcategory field. Writing a subcategory is optional.</li>
                     
-                    <li> The <i> Synonyms </i> field is for writing other ways that the same concept may be written, so that searching for either of them will return the same retuls. </li>
+                    <li> The <i> Synonyms </i> field is for writing other ways that the same concept may be written, or its other names, so that searching for either of them will return the same retult. Writing a synonym is optional. </li>
 
-                    <li> The <i>Study</i> field specifies the type of study of the reference, e.g. it can be an experimental or a theoretical study. </li>
+                    <li> The <i>Study</i> field specifies the type of study of the reference, e.g. it can be an experimental or a theoretical study. Writing study type is optional.</li>
 
-                    <li> To add a reference, wright click in the white are of the <i>Reference</i> field and click on the <i>New reference</i> option. You may either type in the reference details or import references from a bibtex file. </li>
+                    <li> To add a reference, wright click in the white are of the <i>Reference</i> field and click on the <i>New reference</i> option. You may either type in the reference details or import references from a bibtex file. Adding a reference is optional.</li>
 
-                    <li> You may leave any field blank. </li>
                 </ul>
             </ul>
+
+            <img src="figures/fig03.png" width="110%">
 
             <h3> Adding a relation between two concepts </h3>
             <ul>
                 <li> Click on the <i> Add data </i> button. </li>
-                <li> Type the first concept, and if you like a <i> Subcategory </i> for the first concept. </li>
-                <li> Type the second concept, and if you like a <i> Subcategory </i> for the second concept. </li>
+                <li> Type the first concept, and maybe a <i> Subcategory </i> for the first concept. </li>
+                <li> Type the second concept, and maybe a <i> Subcategory </i> for the second concept. </li>
                 <li> Type a description for the relation between the two concepts in the <i>Relatin</i> field. </li>
                 <li> You may add a study type in the <i> Study </i> field.</li>
-                <li> To add a reference, wright click in the white are of the <i>Reference</i> field and click on the <i>New reference</i> option. You may either type in the reference details or import references from a bibtex file.</li>
+                <li> To add a reference, right click on the <i>Reference</i> pane, and click <i>New reference</i> option. You may either type in the reference details or import references from a bibtex file.</li>
             </ul>
 
             <h3> Searching </h3>
             <ul>
-                <li> Type in a work in the <i> Search </i> field in the main window. </li>
+                <li> Use the <i> Search </i> bar on the main window. </li>
                 <li> Use check boxes below the search field to specify where to search. </li>
-                <li> The search results appear in the <i> Concepts</i> area. </li>
+                <li> The search results appear in the <i> Concepts</i> pane. </li>
             </ul>
 
             <p> All the steps above can be repeated, i.e. a concept can have multiple descriptions and relations. </p>

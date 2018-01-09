@@ -7,100 +7,78 @@ License
 -------
 3-clause BSD (https://opensource.org/licenses/BSD-3-Clause).
 
-What this does
+What is GraphNotes?
 --------------
 
-This is a software for organizing and easily retrieving key scientific concepts. As you read textbooks and journal articles, you come across critical concepts that will be likely useful in the future. You can store them in GraphNotes and find them quickly whenever you need them. GraphNotes uses a graph to store concepts. Each concept comprises a node in a graph. If there is a relation between two concepts, it will comprise an link between the concepts. Each node or link can store descriptions and references. When you need to retrieve a specific information, you can search within nodes, or references or links, and quickly get what you were looking for.
+This is a software for organizing and easily retrieving key scientific concepts.
 
- 
+The problem
+-----------
 
-This is a proof of concept integration between a GitHub repo and Figshare in an effort to get a [DOI](http://en.wikipedia.org/wiki/Digital_object_identifier) for a GitHub repository. When a repository is tagged for release on GitHub Fidgit will import the release into Figshare thus giving the code bundle a DOI. In a somewhat meta fashion, Fidgit is publishing itself to Figshare. Its DOI is [https://doi.org/10.6084/m9.figshare.828487](https://doi.org/10.6084/m9.figshare.828487).
+Research requires remembering many facts and details with credible references. It is easy to forget a specifc piece of information after a few days or months, or forget where you read it. Scientists usually mark PDF files or write down important details in text documents. These files can quickly pile up and make it tedious to find specific information.
 
-Fidgit isn't really designed for 'production' use, for example there's little or no error handling but hopefully there's some value here.
+A traditional method for gathering all the necessary information is using paper note cards. In a note card, we write specific information along with their references. We then organize the note cards and use them for writing papers or books. This method has a few drawbacks, namely, it will be difficult to keep all the cards organized as we add more of them, and it will become more difficult to find a specific card quickly. Therefore, people usually prepare and keep a separate set of note cards for each project. This is inefficient!
 
-How it does it
---------------
+![problem](https://bitbucket.org/kavir1698/graphnotes/src/e4f55ecf19098f6b3be12e4f9cb4f16390f27abd/figures/rnotes.jpg?at=master)
 
-Both GitHub and Figshare have pretty fully-featured APIs. Fidgit sits inbetween them listening out for [releases](https://github.com/blog/1547-release-your-software) and when it hears about one (through the webhook POST from GitHub) it downloads the release and pushes it to a predefined Figshare dataset.
 
-Internally, Fidgit represents a _Repository_ and has the concept of a _Release_ which means it's also keeping track of the releases from your GitHub repository.
+Solution
+--------
 
-Getting started
----------------
+Introducing GraphNotes, I offer a solution to this problem. This is a software for organizing and easily retrieving scientific concepts. As you read textbooks or journal articles, you come across critical concepts that will be likely useful in the future. You can store them in GraphNotes and find them quickly whenever you need them. GraphNotes uses a graph structure to store your notes. A graph is a series of nodes that are connected to one another if there is a relationship between any two nodes. Each concept comprises a node in the graph. If there is a relation between two concepts, it will be an link between the concepts. Each node or link can store as many descriptions and references as necessary. When you need to retrieve a specific information, all you need is to search for the concept you are looking for, and see all descriptions about it, and all of its relations with other concepts. The figure below shows a schematic view of how concepts and their relations are organized in GraphNotes. The figure shows descriptions for two concepts and a relation between them, in a graph with five nodes and five edges.
 
-### Access codes
+![solution](https://bitbucket.org/kavir1698/graphnotes/src/e4f55ecf19098f6b3be12e4f9cb4f16390f27abd/figures/graphnotesconcept.png?at=master)
 
-First you need to get yourself a personal access token from your [GitHub profile](https://github.com/settings/applications) (this is going to be the 'github\_token' key in setup.toml) and get some OAuth tokens from [Figshare](http://figshare.com/account/applications). You need to create an application - any URL will work, it's not important for this - and keep a record all four access codes (consumer\_key, consumer\_token etc).
 
-**Important** - If you want to publish code bundles to public articles on Figshare then you'll need to set the permissions for this application to allow public read/write access. Currently this isn't a huge issue though as Fidgit won't publish an unpublished article on Figshare (it will just upload a new code bundle to the unpublished article).
+How to use it
+-------------
 
-![Figshare](https://raw.github.com/arfon/fidgit/master/screens/figshare_applications.png)
+### Installation
 
-### Heroku stuff
+There is no installation. Just download a zip file for your operating system (Windows/Mac/Linux), unzip it, and open the executable within the unzipped folder.
 
-Fidgit is designed to run nicely on Heroku with two dynos, one web and one worker and a couple of free addons for MongoDB and a Redis server for Sidekiq (that does all of the background download from GitHub and then upload to Figshare).
+### Initializing the program for the first time
 
-![Heroku](https://raw.github.com/arfon/fidgit/master/screens/heroku.png)
+If it is the first time you open GraphNotes, it will ask for a location to store its database file. The database file stores all the information you enter into the program, so keep it in a safe location (I recommend your Dropbox or other cloud storages folder). You can back up the database file and open it with GraphNotes on other computers.
 
-Describing all of the Heroku setup is out of the scope of this introduction but as long as you configure it with a single web dyno and a single worker, a MongoHQ and Redistogo free account then you should be golden.
+![initialize](https://bitbucket.org/kavir1698/graphnotes/src/e4f55ecf19098f6b3be12e4f9cb4f16390f27abd/figures/fig01.png?at=master)
 
-### GitHub stuff
 
-You'll need an open source repository that you want to push to Figshare.
+Once you choose an existing database file or create a new one and open the program, you will see three empty panes: Concepts, Relations, and Description. The concepts pane shows the list of concepts you have added. Selecting a concept will show its descriptions in the Description pane, and its related concepts in the Relations pane. Selecting a related concept in the Relations pane will show the relation between the two concepts in the Description pane.
 
-### Figshare stuff
+Above the three panes, there is a search bar, with option to limit the search, and two buttons to add data and export added references as a Bibtex file.
 
-You'll need an article to push to on Figshare. This can be made through the user-interface or API. You just need the integer id of the article for the configuration later.
+![initialize](https://bitbucket.org/kavir1698/graphnotes/src/e4f55ecf19098f6b3be12e4f9cb4f16390f27abd/figures/fig02.png?at=master)
 
-Configuring Fidgit
-------------------
 
-Once you have your Heroku application up and running and your Figshare and GitHub keys you'll need to copy the setup.toml.example file to 'setup.toml'. An example config is below:
+### Adding a single concept and its descriptions
 
-```toml
+1. Click on the _Add data_ button.
+2. Type information in the _Concept 1_ section.
 
-[setup] 
-github_token = "a3133YBT45aW3auFd95n"
-fidgit_location = "http://fidgit.arfon.org"
-figshare_consumer_key = "a3133YBT45aW3auFd95n"
-figshare_consumer_token = "a3133YBT45aW3auFd95n"
-figshare_oauth_token = "a3133YBT45aW3auFd95n"
-figshare_oauth_secret = "a3133YBT45aW3auFd95n"
+  * To make organizing information easier, each concept has a _Subcategory_ field. Use the _Subcategory_ field to add specific details about a more general concept. For example, if you want to add information about the speed of light, you may type "Light" in the concept field, and type "Speed of" in the subcategory field. Writing a subcategory is optional.
 
-[repos]
-  [repos.fidgit]
-  name = "fidgit"
-  location = "https://github.com/arfon/fidgit"
-  figshare_article_id = 828487
-  secret = "a3133YBT45aW3auFd95n"
-```
+  * The _Synonyms_ field is for writing other ways that the same concept may be written, or its other names, so that searching for either of them will return the same retult. Writing a synonym is optional.
 
-Here we're setting the location of your Fidgit instance (your Heroku application address), your GitHub personal access token and your Figshare OAuth credentials.
+  * The _Study_ field specifies the type of study of the reference, e.g. it can be an experimental or a theoretical study. Writing study type is optional.
 
-Next we're setting the repositories that we'd like to create DOIs for on Figshare. Note this is an array in the TOML config, that is, we can support a number of linkages. Important things to realise here:
+  * To add a reference, wright click in the white are of the _Reference_ field and click on the _New reference_ option. You may either type in the reference details or import references from a bibtex file. Adding a reference is optional.
 
-* 'name' is the name of your repository on GitHub
-* 'location' is the HTML url of the repository. Note that at this time Fidgit only supports open source repos.
-* 'figshare\_article_id' is the integer article id of your Figshare
-* 'secret' is a string that you have made up that is used in the webhook push from GitHub to Fidgit. It's basically an API key to Fidgit for a repo.
+![adding](https://bitbucket.org/kavir1698/graphnotes/src/e4f55ecf19098f6b3be12e4f9cb4f16390f27abd/figures/fig03.png?at=master)
 
-Bootstraping Fidgit
--------------------
 
-Now you've got your configuration file setup you need to push the code to your Heroku application and run a couple of rake tasks to initialize the application. They are:
+### Adding a relation between two concept
 
-```ruby
-rake bootstrap_repos
-rake setup_payloads
-```
+1. Click on the _Add data_ button.
+2.  Type the first concept, and maybe a _Subcategory_ for the first concept.
+3.  Type the second concept, and maybe a <i> Subcategory </i> for the second concept.
+4.  Type a description for the relation between the two concepts in the _Relatin_ field.
+5.  You may add a study type in the _Study_ field.
+6.  To add a reference, right click on the _Reference_ pane, and click _New reference_ option. You may either type in the reference details or import references from a bibtex file.
 
-If everything goes to plan then these tasks should run without error and should produce a small amount of debug information. Significantly the second task uses the GitHub API to configure a webhook that posts a JSON payload to your Fidgit application each time a new release is issued. You can check that this is working by going to the service hooks page under 'settings' for your repo.
+### Searching
+1. Use the Search bar on the main window.
+2. Use check boxes below the search field to specify where to search.
+3. The search results appear in the _Concepts_ pane.
 
-![Webhook](https://raw.github.com/arfon/fidgit/master/screens/webhook.png)
-
-That's a wrap!
---------------
-
-And that's about it. If you now create a new release on GitHub then you should see this code bundle being mirrored to your specified location on Figshare. Check out the [Fidgit one here](https://doi.org/10.6084/m9.figshare.828487). Any questions, comments, concerns post an issue.
-
-![DOIed](https://raw.github.com/arfon/fidgit/master/screens/figshare_article.png)
+All the steps above can be repeated, i.e. a concept can have multiple descriptions and relations.
