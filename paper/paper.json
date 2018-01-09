@@ -1,0 +1,23 @@
+{
+  // "@context": "https://raw.githubusercontent.com/mbjones/codemeta/master/codemeta.jsonld",
+  "@type": "GUI",
+  "author": [
+    {
+      "@id": "0000-0003-0895-1495",
+      "@type": "Person",
+      "email": "rezaali.rezaeevahdati@uzh.ch",
+      "name": "Ali R. Vahdati",
+      "affiliation": "Department of Anthropology, University of Zurich"
+    }
+  ],
+  // "identifier": "https://zenodo.org/record/50995#.Vyp9DBUrJBw",
+  "codeRepository": "https://bitbucket.org/kavir1698/graphnotes",
+  "datePublished": "2016-05-04",
+  "dateModified": "2016-05-04",
+  "dateCreated": "2018-01-09",
+  "description": "GraphNotes is a novel approach to organize scientific information as we read them. It stores concepts in nodes of a graph and relations between concepts in the edges of the graph. This helps accessing specific information as quickly and easily as possible.",
+  "keywords": "knowledge organization, Note taking, Literature review",
+  "license": "BSD",
+  "title": "GraphNotes: a novel approach to scientific note taking",
+  "version": "v1.0"
+}
