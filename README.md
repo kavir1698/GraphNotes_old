@@ -19,7 +19,7 @@ Research requires remembering many facts and details with credible references. I
 
 A traditional method for gathering all the necessary information is using paper note cards. In a note card, we write specific information along with their references. We then organize the note cards and use them for writing papers or books. This method has a few drawbacks, namely, it will be difficult to keep all the cards organized as we add more of them, and it will become more difficult to find a specific card quickly. Therefore, people usually prepare and keep a separate set of note cards for each project. This is inefficient!
 
-![problem](https://bytebucket.org/kavir1698/graphnotes/raw/06c77491297384c113c69e368ef8ccef6bf8a737/figures/rnotes.jpg)
+![problem](https://github.com/kavir1698/GraphNotes/blob/master/figures/rnotes.jpg)
 
 
 Solution
@@ -27,7 +27,7 @@ Solution
 
 Introducing GraphNotes, I offer a solution to this problem. This is a software for organizing and easily retrieving scientific concepts. As you read textbooks or journal articles, you come across critical concepts that will be likely useful in the future. You can store them in GraphNotes and find them quickly whenever you need them. GraphNotes uses a graph structure to store your notes. A graph is a series of nodes that are connected to one another if there is a relationship between any two nodes. Each concept comprises a node in the graph. If there is a relation between two concepts, it will be an link between the concepts. Each node or link can store as many descriptions and references as necessary. When you need to retrieve a specific information, all you need is to search for the concept you are looking for, and see all descriptions about it, and all of its relations with other concepts. The figure below shows a schematic view of how concepts and their relations are organized in GraphNotes. The figure shows descriptions for two concepts and a relation between them, in a graph with five nodes and five edges.
 
-![solution](https://bytebucket.org/kavir1698/graphnotes/raw/06c77491297384c113c69e368ef8ccef6bf8a737/figures/graphnotesconcept.png)
+![solution](https://github.com/kavir1698/GraphNotes/blob/master/figures/graphnotesconcept.png)
 
 
 How to use it
@@ -41,13 +41,13 @@ There is no installation. Just download a zip file for your operating system (Wi
 
 If it is the first time you open GraphNotes, it will ask for a location to store its database file. The database file stores all the information you enter into the program, so keep it in a safe location (I recommend your Dropbox or other cloud storages folder). You can back up the database file and open it with GraphNotes on other computers.
 
-![initialize](https://bytebucket.org/kavir1698/graphnotes/raw/06c77491297384c113c69e368ef8ccef6bf8a737/figures/fig01.png)
+![initialize](https://github.com/kavir1698/GraphNotes/blob/master/figures/fig01.png)
 
 Once you choose an existing database file or create a new one and open the program, you will see three empty panes: Concepts, Relations, and Description. The concepts pane shows the list of concepts you have added. Selecting a concept will show its descriptions in the Description pane, and its related concepts in the Relations pane. Selecting a related concept in the Relations pane will show the relation between the two concepts in the Description pane.
 
 Above the three panes, there is a search bar, with option to limit the search, and two buttons to add data and export added references as a Bibtex file.
 
-![initialize](https://bytebucket.org/kavir1698/graphnotes/raw/06c77491297384c113c69e368ef8ccef6bf8a737/figures/fig02.png)
+![initialize](https://github.com/kavir1698/GraphNotes/blob/master/figures/fig02.png)
 
 
 ### Adding a single concept and its descriptions
@@ -63,7 +63,7 @@ Above the three panes, there is a search bar, with option to limit the search, a
 
   * To add a reference, wright click in the white are of the _Reference_ field and click on the _New reference_ option. You may either type in the reference details or import references from a bibtex file. Adding a reference is optional.
 
-![adding](https://bytebucket.org/kavir1698/graphnotes/raw/06c77491297384c113c69e368ef8ccef6bf8a737/figures/fig03.png)
+![adding](https://github.com/kavir1698/GraphNotes/blob/master/figures/fig03.png)
 
 
 ### Adding a relation between two concept
